@@ -1,0 +1,27 @@
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Logs
+*.log
+
+# Build outputs
+build/
+dist/
+
+# Xcode
+DerivedData/
+*.xcuserstate
+*.xcuserdatad/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*~
+
+# IDE settings
+.vscode/
+.idea/
