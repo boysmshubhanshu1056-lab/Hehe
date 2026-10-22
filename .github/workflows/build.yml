@@ -1,0 +1,45 @@
+
+name: Matrix Hub Build
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build Matrix Hub
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Lua
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lua5.4
+
+      - name: Check Lua syntax
+        run: |
+          find src tests -name '*.lua' -print0 |
+            xargs -0 -r -n1 luac5.4 -p
+
+      - name: Run tests
+        run: lua5.4 tests/test_manifest.lua
+
+      - name: Package source
+        run: |
+          mkdir -p dist
+          zip -r dist/MatrixHub-OwnGame.zip \
+            src docs tests README.md .gitignore
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MatrixHub-OwnGame
+          path: dist/MatrixHub-OwnGame.zip
+          if-no-files-found: error
